@@ -1,5 +1,14 @@
-# Vue 3 + TypeScript + Vite
+# vue-free-dialog
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+一个基于 Vue 3 + TypeScript + Vite 的轻量级对话框组件。
 
-Learn more about the recommended Project Setup and IDE Support in the [Vue Docs TypeScript Guide](https://vuejs.org/guide/typescript/overview.html#project-setup).
+---
+
+## 特性
+
+- **响应式设计**：适配移动端和桌面端不同屏幕尺寸
+- **类型安全**：完整的 TypeScript 类型定义
+- **可定制化**：支持自定义主题、位置、动画等
+- **轻量无依赖**：仅依赖 Vue 3 和 Vite，ElementPlus作为icon仓库使用，无深度绑定
+
+---
