@@ -1,6 +1,6 @@
 <template>
     <teleport :to="mergeProps.warpper">
-        <div class="free-dialog-thumb" v-show="isFold && show" ref="thumbnailRef" @click="toogleFold(false)">
+        <div class="free-dialog-thumb" v-show="isFold && show" ref="thumbnailRef" @dblclick="toogleFold(false)" @mousedown.stop="dragIconStart">
             <el-icon v-if="mergeProps.thumbnail?.icon" size="18" class="icon">
                 <component :is="mergeProps.thumbnail.icon" />
             </el-icon>
@@ -278,7 +278,27 @@ function dragStart(event: any) {
         emits("move")
     }
 }
-
+function dragIconStart(event: any) {
+    if (!warpperEle || !mergeProps.value.draggable) {
+        return
+    }
+    if (!thumbnailRef.value) return
+    const pb = thumbnailRef.value
+    const x = event.clientX
+    const y = event.clientY
+    const bl = pb.offsetLeft
+    const bt = pb.offsetTop
+    bindMouseDrag(toPointerPosition)
+    function toPointerPosition(e: any) {
+        const distanceX = e.clientX - x
+        const distanceY = e.clientY - y
+        const left = bl + distanceX
+        const top = bt + distanceY
+        setIconPosition("left", left)
+        setIconPosition("top", top)
+        emits("move")
+    }
+}
 // 缩放
 const defaultHandles = ["l", "r", "t", "b", "lb", "rb"]
 let handleName = ""
@@ -374,6 +394,26 @@ function setPosition(attr: "left" | "top", v: number) {
             }
         }
         dialogRef.value.style[attr] = autoUnit(value)
+    }
+}
+function setIconPosition(attr: "left" | "top", v: number) {
+    if (isAllowValue(v)) {
+        let value = v
+        if (!thumbnailRef.value) return
+        const pb = thumbnailRef.value
+        switch (attr) {
+            case "left": {
+                const maxLeft = warpperEle.offsetWidth - pb.offsetWidth
+                value = Math.min(Math.max(0, value), maxLeft)
+                break
+            }
+            case "top": {
+                const maxTop = warpperEle.offsetHeight - pb.offsetHeight
+                value = Math.min(Math.max(0, value), maxTop)
+                break
+            }
+        }
+        thumbnailRef.value.style[attr] = autoUnit(value)
     }
 }
 let domObserver: MutationObserver;
@@ -566,9 +606,11 @@ export default {
     border: 2px solid #63d681;
     position: absolute;
     padding: 5px;
-    border-radius: 5px;
+    border-radius: 50%;
     color: #fff;
     cursor: pointer;
+    width: 20px;
+    height: 20px;
 }
 
 .free-dialog {
