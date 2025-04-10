@@ -179,7 +179,7 @@ const handleFold = ()=>{
       margin: 20px;
       .tips{
         margin-top: 20px;
-        background-color: #850000;
+        background-color: #7c7c7c99;
         padding: 10px 20px;
       }
     }

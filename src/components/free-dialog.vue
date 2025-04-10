@@ -445,9 +445,35 @@ async function close() {
         emitClose()
     }
 }
+const fadeoutClass = ref("")
 function emitClose() {
-    emits("update:visible", false)
-    emits("closed")
+    console.log("emitClose",animationClass.value)
+    switch(animationClass.value){
+        case 'fadein-right':
+            fadeoutClass.value = 'fadeout-left'
+            break;
+        case 'fadein-left':
+            fadeoutClass.value = 'fadeout-right'
+            break;
+        case 'fadein-down':
+            fadeoutClass.value = 'fadeout-down'
+            break;
+        case 'fadein-up':
+            fadeoutClass.value = 'fadeout-up'
+            break;
+        case 'fadein-center':
+            fadeoutClass.value = 'fadeout-center'
+            break;
+        default:
+            fadeoutClass.value = 'fadeout-center'
+            break;
+    }
+    dialogRef.value?.classList.add(fadeoutClass.value);
+    setTimeout(() => {
+        emits("update:visible", false);
+        emits("closed");
+        dialogRef.value?.classList.remove(fadeoutClass.value);
+    }, 300); // 与动画时长保持一致
 }
 const animationClass = computed(() => {
     if (mergeProps.value.animation === true) {
@@ -698,7 +724,7 @@ export default {
 @keyframes fadeInRight {
     from {
         opacity: 0;
-        transform: translate3d(100%, 0, 0);
+        transform: translate3d(100%, 0, 0) scale(0.1);
     }
 
     to {
@@ -719,7 +745,7 @@ export default {
 @keyframes fadeInLeft {
     from {
         opacity: 0;
-        transform: translate3d(-100%, 0, 0);
+        transform: translate3d(-100%, 0, 0) scale(0.1);
     }
 
     to {
@@ -741,7 +767,7 @@ export default {
     from {
         opacity: 0;
         -webkit-transform: translate3d(0, 100%, 0);
-        transform: translate3d(0, 100%, 0);
+        transform: translate3d(0, 100%, 0) scale(0.1);
     }
 
     to {
@@ -764,7 +790,7 @@ export default {
     from {
         opacity: 0;
         -webkit-transform: translate3d(0, -100%, 0);
-        transform: translate3d(0, -100%, 0);
+        transform: translate3d(0, -100%, 0) scale(0.1);
     }
 
     to {
@@ -802,5 +828,55 @@ export default {
     animation-fill-mode: both;
     -webkit-animation-name: fadeInCenter;
     animation-name: fadeInCenter;
+}
+/* 在现有样式末尾添加 */
+@keyframes fadeoutRight {
+  to {
+    opacity: 0;
+    transform: translate3d(-100%, 0, 0) scale(0.1);
+  }
+}
+.fadeout-right {
+  animation: fadeoutRight 0.3s forwards;
+}
+
+@keyframes fadeoutLeft {
+  to {
+    opacity: 0;
+    transform: translate3d(100%, 0, 0) scale(0.1);
+  }
+}
+.fadeout-left {
+  animation: fadeoutLeft 0.3s forwards;
+}
+
+@keyframes fadeoutUp {
+  to {
+    opacity: 0;
+    transform: translate3d(0, 100%, 0) scale(0.1);
+  }
+}
+.fadeout-up {
+  animation: fadeoutUp 0.3s forwards;
+}
+
+@keyframes fadeoutDown {
+  to {
+    opacity: 0;
+    transform: translate3d(0, -100%, 0) scale(0.1);
+  }
+}
+.fadeout-down {
+  animation: fadeoutDown 0.3s forwards;
+}
+
+@keyframes fadeoutCenter {
+  to {
+    opacity: 0;
+    transform: scale(0.1);
+  }
+}
+.fadeout-center {
+  animation: fadeoutCenter 0.3s forwards;
 }
 </style>
