@@ -4,10 +4,10 @@ import { Operation } from '@element-plus/icons-vue'
 import { ref } from 'vue';
 import CodePreview from './components/code-preview.vue';
 const showDialog1 = ref(false);
-const showDialog2 = ref(false);
+const showDialog2 = ref(true);
 const showDialog3 = ref(false);
 const showDialog4 = ref(false);
-const showDialog5 = ref(false);
+const showDialog5 = ref(true);
 const showDialog6 = ref(false);
 const showDialog7 = ref(false);
 const showDialog8 = ref(false);
