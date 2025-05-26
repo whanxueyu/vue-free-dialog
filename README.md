@@ -12,3 +12,10 @@
 - **轻量无依赖**：仅依赖 Vue 3 和 Vite，ElementPlus作为icon仓库使用，无深度绑定
 
 ---
+
+## 其他说明
+
+- **兼容性**：支持 Vue 3 和 TypeScript 项目。
+- **使用场景**：适用于需要轻量级对话框组件的 Web 应用程序开发。
+
+### 在线预览：[vue-free-dialog](https://free-dialog.netlify.app/)
