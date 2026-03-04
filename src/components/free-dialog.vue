@@ -12,6 +12,8 @@
           v-if="mergeProps.thumbnail?.icon"
           :src="mergeProps.thumbnail.icon"
           class="icon-img"
+          draggable="false"
+          @dragstart.prevent
         />
       </div>
     </div>
@@ -32,7 +34,7 @@
         @mousedown="dragStart"
       >
         <div class="icon">
-          <img v-if="mergeProps.icon" :src="mergeProps.icon" class="icon-img" />
+          <img v-if="mergeProps.icon" :src="mergeProps.icon" class="icon-img" draggable="false" @dragstart.prevent />
         </div>
         <slot v-if="slots.title" name="title"></slot>
         <span v-else class="title">{{ mergeProps.title }}</span>
@@ -731,12 +733,20 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
+  
+  .icon{
+    user-select: none;
+    -webkit-user-drag: none;
+  }
 
   .icon-img {
     width: 20px;
     height: 20px;
     object-fit: contain;
+    user-select: none;
     cursor: all-scroll;
+    -webkit-user-drag: none;
+    pointer-events: auto;
   }
 
   .icon-svg {
