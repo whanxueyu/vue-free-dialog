@@ -11,9 +11,7 @@ const props = withDefaults(defineProps<Props>(), {
 </script>
 
 <template>
-  <pre class="tool-code hljs"
-    >{{ props.code }}
-  </pre>
+  <pre class="tool-code">{{ props.code }}</pre>
 </template>
 
 <style scoped lang="scss">
