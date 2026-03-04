@@ -13,106 +13,75 @@ const showDialog7 = ref(false);
 const showDialog8 = ref(false);
 
 const code1 = ref(`
-  <FreeDialog :show="showDialog1" 
-  title="从左侧弹出" :width="400" height="280" 
-  :left="20" @closed="showDialog1 = false">
-    <CodePreview  v-model:code="code1" 
-    language="javascript">
-    </CodePreview>
-  </FreeDialog>`);
+  title="从左侧弹出" 
+  :width="400" 
+  height="280" 
+  :left="20"
+  `);
 const code2 = ref(`
-  <FreeDialog :show="showDialog2" 
-  title="弹窗居中" :width="400" 
-  height="280" left="calc(50% - 100px)" 
-  @closed="showDialog2 = false">
-    <CodePreview  v-model:code="code2" 
-    language="javascript"></CodePreview>
-  </FreeDialog>`);
+  title="弹窗居中" 
+  :width="400" 
+  height="280" 
+  left="calc(50% - 100px)"
+  `);
 const code3 = ref(`
-  <FreeDialog :show="showDialog3" 
-  title="从右侧弹出" :width="400" 
-  height="280" :right="20" 
-  @closed="showDialog3 = false">
-    <CodePreview  v-model:code="code3" l
-    anguage="javascript"></CodePreview>
-  </FreeDialog>`);
+  title="从右侧弹出" 
+  :width="400" 
+  height="280" 
+  :right="20"`);
 const code4 = ref(`
-  <FreeDialog :show="showDialog4" 
-  title="折叠带图标" :top="300" 
-  :width="400" height="280" 
-  :left="20" @closed="handleFold" 
-  :thumbnail="{icon: 'BellFilled'}" 
-  ref="dialogRef" >
-    <CodePreview  v-model:code="code4" 
-    language="javascript"></CodePreview>
-  </FreeDialog>`);
+  title="折叠带图标" 
+  :top="300" 
+  :width="400" 
+  height="280" 
+  :left="20" 
+  @closed="handleFold" 
+  :thumbnail="{icon: 'BellFilled'}"
+  `);
 const code5 = ref(`
-  <FreeDialog :show="showDialog5" 
-  title="带ICON弹窗" :top="300" 
-  icon='PieChart' :width="400" 
-  height="280" left="calc(50% - 100px)" 
-  @closed="showDialog5 = false">
-    <CodePreview v-model:code="code5" 
-    language="javascript"></CodePreview>
-  </FreeDialog>`);
-const code6 = ref(`
-  <FreeDialog :show="showDialog6" 
-  :width="400" :top="300" 
-  height="280" :right="20" 
-  @closed="showDialog6 = false" 
-  :draggable="false">
-    <CodePreview  v-model:code="code6" 
-    language="javascript"></CodePreview>
-  </FreeDialog>`);
-const code7 = ref(`
-  <FreeDialog :show="showDialog7" 
-  :top="600" :width="400" 
-  height="280" :left="20" 
-  @closed="showDialog7 = false">
-    <template #title>
-        <div class="slottitle">
-          <div class="text">
-            <div class="text-title">
-              标题
-            </div>
-            <div class="text-sub">
-              自定义头部
-            </div>
-          </div>
-          <svg viewBox="0 0 1024 1024" width="18" height="18" class="operation-icon">
-            <path d="M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm0 820c-205.4 0-372-166.6-372-372s166.6-372 372-372 372 166.6 372 372-166.6 372-372 372z"/>
-            <path d="M686.7 638.6L544.1 535.5V288c0-4.4-3.6-8-8-8H488c-4.4 0-8 3.6-8 8v275.4c0 2.1 0.9 4.2 2.4 5.7l171.3 123.9c3.6 2.6 8.6 1.8 11.2-1.8l28.6-39.4c2.6-3.7 1.8-8.7-1.8-11.2z"/>
-          </svg>
-        </div>
-    </template>
-    <CodePreview  v-model:code="code7" 
-    language="javascript"></CodePreview>
-  </FreeDialog>`);
-const code8 = ref(`
-  <FreeDialog :show="showDialog8" 
-  title="footer自定义" :top="600" 
-  :width="400" height="280" 
+  title="带ICON弹窗" 
+  :top="300" 
+  icon='PieChart' 
+  :width="400" 
+  height="280" 
   left="calc(50% - 100px)" 
-  @closed="showDialog8 = false">
-    <template #footer>
-      <div class="footer">
-        <el-button size="small" 
-        type="primary" @click="showDialog8 = false"
-        >确定</el-button>
-        <el-button size="small" 
-        @click="showDialog8 = false"
-        >取消</el-button>
+  `);
+const code6 = ref(`
+  title="没有头部" 
+  :width="400" 
+  :top="300" 
+  height="280" 
+  :right="20" 
+  :draggable="false"
+  `);
+const code7 = ref(`
+  :top="600" 
+  :width="400" 
+  height="280" 
+  :left="20" 
+  <template #title>
+    <div class="slottitle">
+      <div class="text-sub">
+        自定义头部
       </div>
-    </template>
-    <CodePreview  v-model:code="code8" 
-    language="javascript"></CodePreview>
-  </FreeDialog>`);
+    </div>
+  </template>`);
+const code8 = ref(` 
+  title="footer自定义" 
+  :top="600" 
+  :width="400" 
+  height="280" 
+  left="calc(50% - 100px)" 
+  <template #footer>
+    <div class="footer">
+    </div>
+  </template>
+  `);
 
 const dialogRef = ref<InstanceType<typeof FreeDialog>>();
 const handleFold = () => {
   dialogRef.value?.fold();
 };
-// const bell = div
 </script>
 
 <template>
