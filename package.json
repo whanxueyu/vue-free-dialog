@@ -1,22 +1,62 @@
 {
   "name": "vue-free-dialog",
-  "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "description": "A lightweight, highly customizable dialog component for Vue 3 with drag, resize, and fold capabilities",
+  "author": "whanxueyu <1358042645@qq.com>",
+  "license": "MIT",
+  "homepage": "https://free-dialog.netlify.app/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/whanxueyu/vue-free-dialog.git"
+  },
+  "bugs": {
+    "url": "https://github.com/whanxueyu/vue-free-dialog/issues"
+  },
+  "keywords": [
+    "vue",
+    "vue3",
+    "dialog",
+    "modal",
+    "draggable",
+    "resizable",
+    "component",
+    "typescript"
+  ],
   "type": "module",
+  "main": "dist/vue-free-dialog.umd.cjs",
+  "module": "dist/vue-free-dialog.js",
+  "types": "dist/components/free-dialog.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/vue-free-dialog.js",
+      "require": "./dist/vue-free-dialog.umd.cjs"
+    },
+    "./dist/style.css": "./dist/style.css"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc -b && vite build",
-    "preview": "vite preview"
+    "build:lib": "vue-tsc --declaration && vite build --config vite.lib.config.ts",
+    "preview": "vite preview",
+    "prepublishOnly": "npm run build:lib"
   },
-  "dependencies": {
+  "peerDependencies": {
     "vue": "^3.5.13"
   },
   "devDependencies": {
+    "@types/node": "^22.13.10",
     "@vitejs/plugin-vue": "^5.2.1",
     "@vue/tsconfig": "^0.7.0",
     "sass-embedded": "^1.86.3",
+    "terser": "^5.46.0",
     "typescript": "~5.7.2",
     "vite": "^6.2.0",
+    "vite-plugin-dts": "^3.9.1",
     "vue-tsc": "^2.2.4"
   }
 }

@@ -1,0 +1,42 @@
+# Dependencies
+node_modules
+
+# Build output
+dist
+
+# Development files
+src
+public
+*.html
+*.md
+
+# Config files (except those needed for build)
+vite.config.ts
+tsconfig.*
+eslint*
+prettier*
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Test files
+test
+tests
+coverage
+__tests__
+*.test.ts
+*.spec.ts

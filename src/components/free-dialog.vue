@@ -662,14 +662,6 @@ function autoUnit(value: number | string) {
 function isAllowValue(value: any) {
   return value !== null && value !== undefined;
 }
-// 判断是否为图片 URL
-function isImageUrl(str: string): boolean {
-  if (typeof str !== "string") return false;
-  // 检查是否以 http/https 开头，或者包含图片扩展名
-  return (
-    /^https?:\/\//.test(str) || /\.(png|jpg|jpeg|gif|svg|webp)$/i.test(str)
-  );
-}
 // 事件绑定处理
 function bindMouseDrag(callback: any) {
   addEvent(document.documentElement, "mousemove", handleMove);
