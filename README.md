@@ -1,6 +1,6 @@
 # vue-free-dialog
 
-一个基于 Vue 3 + TypeScript + Vite 的轻量级对话框组件。
+一个基于 Vue 3 + TypeScript + Vite 的轻量级对话框组件，可以拖拽、缩放、折叠展开等等
 
 ---
 
