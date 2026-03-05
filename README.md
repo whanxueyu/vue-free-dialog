@@ -19,6 +19,7 @@
 - **🔒 安全关闭** - 支持异步关闭验证
 - **💻 类型安全** - 完整 TypeScript 类型定义
 - **🚀 零依赖** - 仅依赖 Vue 3，无任何 UI 库绑定
+- **🔝 自动置顶** - 点击或拖拽时自动提升到最上层，无需手动设置 z-index
 
 ---
 
@@ -302,15 +303,53 @@ const handleBeforeClose = async () => {
 </script>
 ```
 
-### 5. 自定义图标
+### 6. 自动置顶功能
+
+对话框支持自动层级管理，点击或拖拽时会自动提升到最上层：
+
+```vue
+<template>
+  <div>
+    <!-- 多个对话框重叠时，点击任意一个会自动显示在最前 -->
+    <free-dialog v-model:visible="visible1" :left="20" :top="20">
+      对话框 1 - 点击我会自动到最上层
+    </free-dialog>
+    
+    <free-dialog v-model:visible="visible2" :left="100" :top="100">
+      对话框 2 - 点击我也会自动到最上层
+    </free-dialog>
+  </div>
+</template>
+
+<script setup>
+import { ref } from 'vue'
+import FreeDialog from './components/free-dialog.vue'
+
+const visible1 = ref(true)
+const visible2 = ref(true)
+</script>
+```
+
+**特性说明：**
+- ✅ 点击对话框任意位置自动置顶
+- ✅ 拖拽时自动提升到最上层
+- ✅ 智能管理 z-index，避免层级冲突
+- ✅ 不影响其他对话框的相对层级关系
+
+---
+
+### 7. 自定义图标
 
 **使用 SVG 路径：**
 ```vue
+<script setup>
+import mySvg from './assets/icon.svg'
+</script>
 <template>
   <free-dialog
     v-model:visible="visible"
     title="带自定义图标的对话框"
-    icon="M512 64C264.6 64 64 264.6 64 512s200.6 448..."
+    :icon="mySvg"
   >
     使用 SVG 路径作为图标
   </free-dialog>
