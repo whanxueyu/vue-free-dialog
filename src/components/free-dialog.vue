@@ -25,6 +25,7 @@
         'padding-bottom': slots.footer ? '44px' : '10px',
       }"
       ref="dialogRef"
+      @mousedown="toTheTop"
       v-show="visible && !isFold && show"
     >
       <div
@@ -34,7 +35,13 @@
         @mousedown="dragStart"
       >
         <div class="icon">
-          <img v-if="mergeProps.icon" :src="mergeProps.icon" class="icon-img" draggable="false" @dragstart.prevent />
+          <img
+            v-if="mergeProps.icon"
+            :src="mergeProps.icon"
+            class="icon-img"
+            draggable="false"
+            @dragstart.prevent
+          />
         </div>
         <slot v-if="slots.title" name="title"></slot>
         <span v-else class="title">{{ mergeProps.title }}</span>
@@ -363,6 +370,31 @@ function dragStart(event: any) {
     emits("move");
   }
 }
+function toTheTop() {
+  if (dialogRef.value) {
+    // 只需增加 z-index 即可让对话框显示在最上层，不会触发 DOM 重排和组件重新加载
+    let nodeLength = dialogRef.value.parentNode?.childNodes.length || 1;
+    mergeProps.value.zIndex = mergeProps.value.zIndex || 900;
+    const newZIndex = mergeProps.value.zIndex + nodeLength;
+    dialogRef.value.style.zIndex = newZIndex.toString();
+
+    const allDialogs =
+      dialogRef.value.parentNode?.querySelectorAll(".free-dialog");
+    if (allDialogs) {
+      allDialogs.forEach((dialog: Element) => {
+        if (dialog !== dialogRef.value) {
+          const dialogZIndex = parseInt(
+            (dialog as HTMLElement).style.zIndex || "900"
+          );
+          if (dialogZIndex >= newZIndex) {
+            (dialog as HTMLElement).style.zIndex = (newZIndex - 1).toString();
+          }
+        }
+      });
+    }
+  }
+}
+
 function dragIconStart(event: any) {
   if (!warpperEle || !mergeProps.value.draggable) {
     return;
@@ -725,8 +757,8 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  
-  .icon{
+
+  .icon {
     user-select: none;
     -webkit-user-drag: none;
   }
@@ -753,8 +785,6 @@ export default {
   box-sizing: border-box;
   padding: 10px;
   border-radius: 4px;
-  z-index: 999 !important;
-  z-index: 100;
   background-color: rgba(23, 49, 71, 0.8);
   background-color: #3a654df0;
   border: 2px solid #63d681;

@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { defineProps } from "vue";
 // 定义组件props
 interface Props {
   code: string;
