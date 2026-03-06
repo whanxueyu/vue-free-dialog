@@ -12,68 +12,51 @@ const showDialog6 = ref(false);
 const showDialog7 = ref(false);
 const showDialog8 = ref(false);
 
-const code1 = ref(`
+const desc1 = ref(`
   title="从左侧弹出" 
-  :width="400" 
-  height="280" 
   :left="20"
   `);
-const code2 = ref(`
+const desc2 = ref(`
   title="弹窗居中" 
-  :width="400" 
-  height="280" 
   left="calc(50% - 100px)"
   `);
-const code3 = ref(`
+const desc3 = ref(`
   title="从右侧弹出" 
-  :width="400" 
-  height="280" 
   :right="20"`);
-const code4 = ref(`
+const desc4 = ref(`
   title="折叠带图标" 
   :top="300" 
-  :width="400" 
-  height="280" 
   :left="20" 
   @closed="handleFold" 
-  :thumbnail="{icon: 'BellFilled'}"
+  :thumbnail="{icon: 'vueIcon'}"
   `);
-const code5 = ref(`
+const desc5 = ref(`
   title="带ICON弹窗" 
   :top="300" 
-  icon='PieChart' 
-  :width="400" 
-  height="280" 
+  icon='vueIcon' 
   left="calc(50% - 100px)" 
   `);
-const code6 = ref(`
+const desc6 = ref(`
   title="没有头部" 
-  :width="400" 
   :top="300" 
-  height="280" 
   :right="20" 
   :draggable="false"
   `);
-const code7 = ref(`
+const desc7 = ref(`
   :top="600" 
-  :width="400" 
-  height="280" 
   :left="20" 
   <template #title>
-    <div class="slottitle">
-      <div class="text-sub">
-        自定义头部
-      </div>
+    <div class="text-sub">
+      自定义头部
     </div>
   </template>`);
-const code8 = ref(` 
+const desc8 = ref(` 
   title="footer自定义" 
   :top="600" 
-  :width="400" 
-  height="280" 
   left="calc(50% - 100px)" 
   <template #footer>
     <div class="footer">
+    ...
     </div>
   </template>
   `);
@@ -85,7 +68,7 @@ const handleFold = () => {
 </script>
 
 <template>
-  <div class="openDialog">
+  <div class="context">
     <div class="btn btn-primary" @click="showDialog1 = !showDialog1">
       弹窗左
     </div>
@@ -111,8 +94,7 @@ const handleFold = () => {
       底部自定义
     </div>
     <div class="tips">
-      所有弹窗均可随意拖拽位置
-      (除了没有头部的)、修改大小，有边缘计算，触底自动计算修改弹窗高度；折叠后的弹窗，双击缩放后的图标可展开；点击拖拽会自动置顶；
+      可随意拖拽修改大小，有边缘计算，触底自动修改弹窗高度；折叠后的弹窗，双击图标可展开恢复；点击或拖拽弹窗会自动置顶；
     </div>
   </div>
   <!-- 弹窗位置 -->
@@ -124,7 +106,7 @@ const handleFold = () => {
     :left="20"
     @closed="showDialog1 = false"
   >
-    <CodePreview v-model:code="code1" language="html"></CodePreview>
+    <CodePreview v-model:code="desc1" language="html"></CodePreview>
   </FreeDialog>
   <FreeDialog
     :show="showDialog2"
@@ -134,7 +116,7 @@ const handleFold = () => {
     left="calc(50% - 100px)"
     @closed="showDialog2 = false"
   >
-    <CodePreview v-model:code="code2" language="html"></CodePreview>
+    <CodePreview v-model:code="desc2" language="html"></CodePreview>
   </FreeDialog>
   <FreeDialog
     :show="showDialog3"
@@ -144,7 +126,7 @@ const handleFold = () => {
     :right="20"
     @closed="showDialog3 = false"
   >
-    <CodePreview v-model:code="code3" language="html"></CodePreview>
+    <CodePreview v-model:code="desc3" language="html"></CodePreview>
   </FreeDialog>
   <!-- 折叠带图标 -->
   <FreeDialog
@@ -158,7 +140,7 @@ const handleFold = () => {
     :thumbnail="{ icon: vueIcon, left: 10 }"
     ref="dialogRef"
   >
-    <CodePreview v-model:code="code4" language="html"></CodePreview>
+    <CodePreview v-model:code="desc4" language="html"></CodePreview>
   </FreeDialog>
   <FreeDialog
     :show="showDialog5"
@@ -170,7 +152,7 @@ const handleFold = () => {
     left="calc(50% - 100px)"
     @closed="showDialog5 = false"
   >
-    <CodePreview v-model:code="code5" language="html"></CodePreview>
+    <CodePreview v-model:code="desc5" language="html"></CodePreview>
   </FreeDialog>
   <FreeDialog
     :show="showDialog6"
@@ -181,7 +163,7 @@ const handleFold = () => {
     @closed="showDialog6 = false"
     :draggable="false"
   >
-    <CodePreview v-model:code="code6" language="html"></CodePreview>
+    <CodePreview v-model:code="desc6" language="html"></CodePreview>
   </FreeDialog>
   <!-- 插槽自定义 -->
   <FreeDialog
@@ -193,7 +175,7 @@ const handleFold = () => {
     @closed="showDialog7 = false"
   >
     <template #title>
-      <div class="slottitle">
+      <div class="slot-title">
         <div class="text">
           <div class="text-title">标题</div>
           <div class="text-sub">自定义头部</div>
@@ -213,7 +195,7 @@ const handleFold = () => {
         </svg>
       </div>
     </template>
-    <CodePreview v-model:code="code7" language="html"></CodePreview>
+    <CodePreview v-model:code="desc7" language="html"></CodePreview>
   </FreeDialog>
   <FreeDialog
     :show="showDialog8"
@@ -232,12 +214,12 @@ const handleFold = () => {
         <button class="btn btn-small" @click="showDialog8 = false">取消</button>
       </div>
     </template>
-    <CodePreview v-model:code="code8" language="html"></CodePreview>
+    <CodePreview v-model:code="desc8" language="html"></CodePreview>
   </FreeDialog>
 </template>
 
 <style scoped lang="scss">
-.openDialog {
+.context {
   bottom: 0;
   position: absolute;
   margin: 20px;
@@ -247,7 +229,7 @@ const handleFold = () => {
     padding: 10px 20px;
   }
 }
-.slottitle {
+.slot-title {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -266,7 +248,7 @@ const handleFold = () => {
     }
   }
   .operation-icon {
-    color: #f8d033;
+    fill: #f8d033;
     cursor: pointer;
   }
 }

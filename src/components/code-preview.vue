@@ -18,7 +18,7 @@ const props = withDefaults(defineProps<Props>(), {
   padding: 0;
   margin: 0;
   overflow: auto;
-  color:rgb(142, 200, 255);
+  color:#dbedfd;
   height: 100%;
 }
 </style>

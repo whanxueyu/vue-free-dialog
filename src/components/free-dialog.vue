@@ -59,15 +59,20 @@
         </svg>
       </div>
       <svg
-        v-else-if="mergeProps.closeable && mergeProps.closeButton"
-        viewBox="0 0 1024 1024"
+      v-else-if="mergeProps.closeable && mergeProps.closeButton"
+        @click="close"
+        xmlns="http://www.w3.org/2000/svg"
         width="18"
         height="18"
-        class="close-btn__flot"
-        @click="close"
+        fill="currentColor"
+        class="bi bi-x-circle close-btn__flot"
+        viewBox="0 0 16 16"
       >
         <path
-          d="M563.8 512l262.5-312.9c2.6-3.1 0.1-7.7-4.4-7.7h-79.7c-2.3 0-4.5 1.1-5.8 2.9L512 458.9 287.6 194.3c-1.4-1.7-3.6-2.9-5.8-2.9H202c-4.5 0-7 4.6-4.4 7.7L460.2 512 197.7 824.9c-2.6 3.1-0.1 7.7 4.4 7.7h79.7c2.3 0 4.5-1.1 5.8-2.9L512 565.1l224.4 264.6c1.4 1.7 3.6 2.9 5.8 2.9h79.7c4.5 0 7-4.6 4.4-7.7L563.8 512z"
+          d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"
+        />
+        <path
+          d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"
         />
       </svg>
       <div class="free-dialog__content">
@@ -743,10 +748,18 @@ export default {
 };
 </script>
 
+<style lang="scss">
+:root {
+  --free-dialog-bg-color: #254f67f0;
+  --free-dialog-border-color: #1bdae7;
+  --free-dialog-header-color: #208b9d;
+  --free-dialog-header-side-color: #306e85;
+}
+</style>
 <style lang="scss" scoped>
 .free-dialog-thumb {
-  background-color: #3a654df0;
-  border: 2px solid #63d681;
+  background-color: var(--free-dialog-bg-color);
+  border: 1px solid var(--free-dialog-border-color);
   position: absolute;
   padding: 5px;
   border-radius: 50%;
@@ -785,9 +798,8 @@ export default {
   box-sizing: border-box;
   padding: 10px;
   border-radius: 4px;
-  background-color: rgba(23, 49, 71, 0.8);
-  background-color: #3a654df0;
-  border: 2px solid #63d681;
+  background-color: var(--free-dialog-bg-color);
+  border: 1px solid var(--free-dialog-border-color);
 
   .free-dialog__header {
     height: 40px;
@@ -795,21 +807,21 @@ export default {
     line-height: 40px;
     overflow: hidden;
     padding: 0px 10px;
-    color: var(--el-text-color-primary);
+    color: #ffffff;
     position: absolute;
     top: 0;
     left: 0;
     display: flex;
     justify-content: space-between;
-    border-bottom: 2px solid #63d681;
+    border-bottom: 1px solid var(--free-dialog-border-color);
     user-select: none;
     background-image: linear-gradient(
       90deg,
-      #ffffff00 0%,
-      rgba(175, 223, 188, 0.25) 24%,
-      rgba(98, 191, 123, 0.5) 46%,
-      rgba(94, 190, 120, 0.49) 47%,
-      #ffffff00 100%
+      transparent 0%,
+      var(--free-dialog-header-side-color) 20%,
+      var(--free-dialog-header-color) 50%,
+      var(--free-dialog-header-side-color) 80%,
+      transparent 100%
     );
 
     .icon {
@@ -850,10 +862,10 @@ export default {
 
   .close-btn__flot {
     position: absolute;
-    right: -8px;
-    top: -8px;
+    right: 2px;
+    top: 2px;
     cursor: pointer;
-    width: 24px;
+    width: 18px;
     fill: #ffffff;
     color: #ffffff;
   }
