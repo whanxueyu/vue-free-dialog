@@ -97,7 +97,6 @@ const handleFold = () => {
       可随意拖拽修改大小，有边缘计算，触底自动修改弹窗高度；折叠后的弹窗，双击图标可展开恢复；点击或拖拽弹窗会自动置顶；
     </div>
   </div>
-  <!-- 弹窗位置 -->
   <FreeDialog
     :show="showDialog1"
     title="从左侧弹出"
@@ -128,7 +127,6 @@ const handleFold = () => {
   >
     <CodePreview v-model:code="desc3" language="html"></CodePreview>
   </FreeDialog>
-  <!-- 折叠带图标 -->
   <FreeDialog
     :show="showDialog4"
     title="折叠带图标"
@@ -165,7 +163,6 @@ const handleFold = () => {
   >
     <CodePreview v-model:code="desc6" language="html"></CodePreview>
   </FreeDialog>
-  <!-- 插槽自定义 -->
   <FreeDialog
     :show="showDialog7"
     :top="600"

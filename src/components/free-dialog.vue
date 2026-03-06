@@ -59,7 +59,7 @@
         </svg>
       </div>
       <svg
-      v-else-if="mergeProps.closeable && mergeProps.closeButton"
+        v-else-if="mergeProps.closeable && mergeProps.closeButton"
         @click="close"
         xmlns="http://www.w3.org/2000/svg"
         width="18"
@@ -95,13 +95,20 @@
 import { computed, onMounted, onUnmounted, ref, useSlots, nextTick } from "vue";
 
 const globalConfig: Record<string, any> = {};
-interface Position {
-  left?: number | string; // 定位 left值
-  right?: number | string; // 定位right值
-  top?: number | string; // 定位top值
-  bottom?: number | string; // 定位bottom值
+type Position = {
+  left?: number | string; // 定位 left 值
+  right?: number | string; // 定位 right 值
+  top?: number | string; // 定位 top 值
+  bottom?: number | string; // 定位 bottom 值
 }
-interface Props {
+type Thumbnail = {
+  left?: number | string; // 定位 left 值
+  right?: number | string; // 定位 right 值
+  top?: number | string; // 定位 top 值
+  bottom?: number | string; // 定位 bottom 值
+  icon?: string; // 图标：可以是图片 URL 或 SVG 路径数据
+}
+type FreeDialogProps = {
   warpper?: string; // 容器id 默认是app，将作为定位的参照元素，一般不需要修改
   title?: string; // 弹框标题
   visible?: boolean; // 是否启用
@@ -126,13 +133,7 @@ interface Props {
   icon?: string; // 图标：可以是图片 URL 或 SVG 路径数据
   customClass?: string; // 自定义 class
   defaultFold?: boolean; // 是否折叠
-  thumbnail?: {
-    left?: number | string; // 定位 left 值
-    right?: number | string; // 定位 right 值
-    top?: number | string; // 定位 top 值
-    bottom?: number | string; // 定位 bottom 值
-    icon?: string; // 图标：可以是图片 URL 或 SVG 路径数据
-  }; // 折叠状态下的配置
+  thumbnail?: Thumbnail;
   beforeClose?: () => Promise<any> | boolean | void;
 }
 /**
@@ -158,7 +159,7 @@ interface Props {
  * @property {number} maxHeight 最大高度
  * @property {number} zIndex 层级
  */
-const props = withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<FreeDialogProps>(), {
   visible: true,
   show: false,
   closeable: true,
@@ -178,7 +179,7 @@ const props = withDefaults(defineProps<Props>(), {
 const emits = defineEmits(["update:visible", "resize", "move", "closed"]);
 const slots = useSlots();
 const mergeProps = computed(() => {
-  var newProps: Props = { ...props };
+  var newProps: FreeDialogProps = { ...props };
   if (!props.warpper) {
     newProps.warpper = globalConfig.warpper || "#app";
   }
@@ -775,22 +776,22 @@ export default {
     user-select: none;
     -webkit-user-drag: none;
   }
+}
 
-  .icon-img {
-    width: 20px;
-    height: 20px;
-    object-fit: contain;
-    user-select: none;
-    cursor: all-scroll;
-    -webkit-user-drag: none;
-    pointer-events: auto;
-  }
+.icon-img {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  user-select: none;
+  cursor: all-scroll;
+  -webkit-user-drag: none;
+  pointer-events: auto;
+}
 
-  .icon-svg {
-    width: 20px;
-    height: 20px;
-    fill: #ffffff;
-  }
+.icon-svg {
+  width: 20px;
+  height: 20px;
+  fill: #ffffff;
 }
 
 .free-dialog {
@@ -831,19 +832,6 @@ export default {
       color: #ffffff;
       display: flex;
       align-items: center;
-
-      .icon-img {
-        width: 20px;
-        height: 20px;
-        object-fit: contain;
-        cursor: all-scroll;
-      }
-
-      .icon-svg {
-        width: 20px;
-        height: 20px;
-        fill: #ffffff;
-      }
     }
 
     .title {
