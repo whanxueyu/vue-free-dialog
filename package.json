@@ -1,6 +1,6 @@
 {
   "name": "vue-free-dialog",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "A lightweight, highly customizable dialog component for Vue 3 with drag, resize, and fold capabilities",
   "author": "whanxueyu <1358042645@qq.com>",
   "license": "MIT",
