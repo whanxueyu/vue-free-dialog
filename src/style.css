@@ -21,13 +21,47 @@ body {
   height: 100vh;
   overflow: hidden;
 }
+
 #app {
   width: 100vw;
   height: 100vh;
   margin: 0;
   padding: 0;
   overflow: hidden;
-  background-color: #111;
   display: block;
+  background: radial-gradient(ellipse 150% 150% at 80% 80%,
+      transparent 40%,
+      rgba(255, 255, 255, 0.25) 60%,
+      transparent 100%),
+    radial-gradient(ellipse 150% 150% at 20% 20%,
+      transparent 40%,
+      rgba(0, 0, 0, 0.25) 60%,
+      transparent 100%),
+    radial-gradient(ellipse 100% 100% at 50% 50%,
+      transparent 25%,
+      rgba(0, 0, 0, 0.5) 75%),
+    linear-gradient(100deg,
+      hsla(0, 50%, 25%, 0.25) 0%,
+      hsla(5, 75%, 35%, 0.25) 15%,
+      hsla(10, 75%, 40%, 0.25) 25%,
+      hsla(15, 75%, 55%, 0.25) 35%,
+      hsla(20, 65%, 45%, 0.25) 40%,
+      hsla(10, 55%, 40%, 0.25) 50%,
+      hsla(5, 55%, 35%, 0.25) 65%,
+      hsla(5, 55%, 35%, 0.25) 70%,
+      hsla(0, 65%, 30%, 0.25) 85%,
+      hsla(0, 75%, 25%, 0.25) 100%),
+    linear-gradient(180deg,
+      hsla(210, 15%, 20%, 0.5) 0,
+      hsla(220, 25%, 10%, 0.5) 35%,
+      hsla(235, 25%, 5%, 0.5) 65%,
+      hsla(0, 0%, 0%, 0.5) 100%),
+    linear-gradient(180deg,
+      hsl(200, 80%, 30%) 0%,
+      hsl(195, 70%, 45%) 7%,
+      hsl(180, 80%, 70%) 25%,
+      hsl(180, 100%, 60%) 35%,
+      hsl(190, 70%, 55%) 55%,
+      hsl(195, 100%, 35%) 75%,
+      hsl(200, 85%, 25%) 100%);
 }
-

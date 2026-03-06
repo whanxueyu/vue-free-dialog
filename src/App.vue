@@ -69,28 +69,28 @@ const handleFold = () => {
 
 <template>
   <div class="context">
-    <div class="btn btn-primary" @click="showDialog1 = !showDialog1">
+    <div :class="!showDialog1 ? 'btn btn-plain' : 'btn'" @click="showDialog1 = !showDialog1">
       弹窗左
     </div>
-    <div class="btn btn-primary" @click="showDialog2 = !showDialog2">
+    <div :class="!showDialog2 ? 'btn btn-plain' : 'btn'" @click="showDialog2 = !showDialog2">
       弹窗中
     </div>
-    <div class="btn btn-primary" @click="showDialog3 = !showDialog3">
+    <div :class="!showDialog3 ? 'btn btn-plain' : 'btn'" @click="showDialog3 = !showDialog3">
       弹窗右
     </div>
-    <div class="btn btn-success" @click="showDialog4 = !showDialog4">
+    <div :class="!showDialog4 ? 'btn btn-plain' : 'btn'" @click="showDialog4 = !showDialog4">
       可折叠弹窗
     </div>
-    <div class="btn btn-success" @click="showDialog5 = !showDialog5">
+    <div :class="!showDialog5 ? 'btn btn-plain' : 'btn'" @click="showDialog5 = !showDialog5">
       带 ICON 弹窗
     </div>
-    <div class="btn btn-success" @click="showDialog6 = !showDialog6">
+    <div :class="!showDialog6 ? 'btn btn-plain' : 'btn'" @click="showDialog6 = !showDialog6">
       没有头部
     </div>
-    <div class="btn btn-primary btn-plain" @click="showDialog7 = !showDialog7">
+    <div :class="!showDialog7 ? 'btn btn-plain' : 'btn'" @click="showDialog7 = !showDialog7">
       头部自定义
     </div>
-    <div class="btn btn-primary btn-plain" @click="showDialog8 = !showDialog8">
+    <div :class="!showDialog8 ? 'btn btn-plain' : 'btn'" @click="showDialog8 = !showDialog8">
       底部自定义
     </div>
     <div class="tips">
@@ -205,10 +205,10 @@ const handleFold = () => {
   >
     <template #footer>
       <div class="footer">
-        <button class="btn btn-small btn-primary" @click="showDialog8 = false">
+        <button class="btn" @click="showDialog8 = false">
           确定
         </button>
-        <button class="btn btn-small" @click="showDialog8 = false">取消</button>
+        <button class="btn btn-plain" @click="showDialog8 = false">取消</button>
       </div>
     </template>
     <CodePreview v-model:code="desc8" language="html"></CodePreview>
@@ -260,9 +260,6 @@ const handleFold = () => {
   background-color: #409eff;
   color: white;
 
-  &.btn-success {
-    background-color: #67c23a;
-  }
 
   &.btn-plain {
     background-color: transparent;
