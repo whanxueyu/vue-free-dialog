@@ -775,6 +775,9 @@ export default {
   .icon {
     user-select: none;
     -webkit-user-drag: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 }
 
