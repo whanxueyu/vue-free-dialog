@@ -13,6 +13,8 @@
           :src="mergeProps.thumbnail.icon"
           class="icon-img"
           draggable="false"
+          :title="mergeProps.title"
+          :alt="mergeProps.title"
           @dragstart.prevent
         />
       </div>
