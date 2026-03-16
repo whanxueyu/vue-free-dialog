@@ -11,8 +11,8 @@
 ## ✨ 特性亮点
 
 - **🎯 自由拖拽** - 支持任意位置拖拽，智能边界限制
-- **📐 多向缩放** - 8 方向自由缩放（上下左右 + 四角）
-- **📌 折叠展开** - 折叠为可拖拽图标，双击快速展开
+- **📐 多向缩放** - 6 方向自由缩放（上下左右 + 左下角 + 右下角）
+- **📌 折叠展开** - 折叠为可拖拽图标，单击快速展开（支持双击配置）
 - **🎬 智能动画** - 5 种入场/出场动画，根据位置自动选择
 - **🎨 灵活定制** - 支持 SVG/图片图标、自定义样式、插槽
 - **📱 响应式** - 自动适配窗口大小，防止超出边界
@@ -35,6 +35,10 @@ npm install vue-free-dialog
 git clone https://github.com/whanxueyu/vue-free-dialog.git
 # 复制 src/components/free-dialog.vue 到你的项目
 ```
+### 仓库地址
+直接访问 [vue-free-dialog](https://github.com/whanxueyu/vue-free-dialog)
+
+或复制 https://github.com/whanxueyu/vue-free-dialog
 
 ---
 
@@ -58,7 +62,7 @@ git clone https://github.com/whanxueyu/vue-free-dialog.git
 
 <script setup>
 import { ref } from 'vue'
-import FreeDialog from './components/free-dialog.vue'
+import FreeDialog from 'vue-free-dialog'
 
 const visible = ref(false)
 </script>
@@ -77,8 +81,8 @@ const visible = ref(false)
     :height="400"
     :min-width="300"
     :min-height="200"
-    icon="M512 64C264.6 64..."  // SVG 路径
-    animation
+    :icon="vueIcon"  // 导入的 SVG 或图片
+    :animation="true"
     :before-close="handleBeforeClose"
   >
     <!-- 自定义标题 -->
@@ -96,7 +100,8 @@ const visible = ref(false)
 
 <script setup>
 import { ref } from 'vue'
-import FreeDialog from './components/free-dialog.vue'
+import FreeDialog from 'vue-free-dialog'
+import vueIcon from './assets/icon.svg'
 
 const dialogVisible = ref(false)
 
@@ -156,6 +161,7 @@ interface Position {
 ```
 
 #### ThumbnailConfig 类型
+v1.1.3 重要更新：默认触发方式改为单击，新增 trigger 配置
 
 ```typescript
 interface ThumbnailConfig {
@@ -164,7 +170,18 @@ interface ThumbnailConfig {
   top?: number | string     // 缩略图定位 top 值
   bottom?: number | string  // 缩略图定位 bottom 值
   icon?: string             // 图标：SVG 路径或图片 URL
+  trigger?: string          // 触发方式：'click'(默认) 或 'doubleClick'
 }
+```
+
+### 示例
+
+```vue
+<!-- 单击展开（默认） -->
+<free-dialog :thumbnail="{ icon: myIcon, trigger: 'click' }" />
+
+<!-- 双击展开 -->
+<free-dialog :thumbnail="{ icon: myIcon, trigger: 'doubleClick' }" />
 ```
 
 ### Events
@@ -273,13 +290,16 @@ dialogRef.value.setPosition('top', 50)
   v-model:visible="visible"
   :default-fold="false"
   :thumbnail="{
-    icon: 'M8 16a2 2 0 0 0 2-2H6...', // SVG 路径或图片 URL
+    icon: vueIcon,
     left: 10,
-    top: 100
+    top: 100,
+    trigger: 'click'  // 单击展开（默认）
   }"
 >
-  可折叠为图标的对话框，双击图标展开
-  拖拽图标可移动位置
+  可折叠为图标的对话框
+  - 单击图标即可展开（v1.1.3 默认行为）
+  - 拖拽图标可移动位置
+  - 支持配置为双击展开：trigger: 'doubleClick'
 </free-dialog>
 ```
 
@@ -323,7 +343,7 @@ const handleBeforeClose = async () => {
 
 <script setup>
 import { ref } from 'vue'
-import FreeDialog from './components/free-dialog.vue'
+import FreeDialog from 'vue-free-dialog'
 
 const visible1 = ref(true)
 const visible2 = ref(true)
@@ -340,31 +360,58 @@ const visible2 = ref(true)
 
 ### 7. 自定义图标
 
-**使用 SVG 路径：**
+**使用导入的 SVG/图片：**
 ```vue
 <script setup>
-import mySvg from './assets/icon.svg'
+import vueIcon from './assets/vue.svg'  // SVG 文件
+import pngIcon from './assets/icon.png' // PNG 文件
 </script>
+
 <template>
+  <!-- 标题栏图标 -->
   <free-dialog
     v-model:visible="visible"
     title="带自定义图标的对话框"
-    :icon="mySvg"
+    :icon="vueIcon"
   >
-    使用 SVG 路径作为图标
+    使用导入的图片作为标题栏图标
+  </free-dialog>
+  
+  <!-- 折叠缩略图图标 -->
+  <free-dialog
+    v-model:visible="visible2"
+    :thumbnail="{ icon: pngIcon }"
+  >
+    使用导入的图片作为缩略图图标
   </free-dialog>
 </template>
 ```
 
-**使用图片 URL：**
+**使用外部图片 URL：**
+
+```vue
+<template>
+  <free-dialog 
+    :icon="'https://example.com/icon.png'"
+    :thumbnail="{ icon: 'https://example.com/thumb.png' }"
+  >
+    使用网络图片作为图标
+  </free-dialog>
+</template>
+
+```
+
+**使用 SVG 路径数据：**
+
 ```vue
 <script setup>
-import myIcon from './assets/icon.png'
+// 直接使用 SVG path 的 d 属性值
+const svgPath = 'M512 64C264.6 64...'
 </script>
 
 <template>
-  <free-dialog :icon="myIcon">
-    使用导入的图片作为图标
+  <free-dialog :icon="svgPath">
+    使用 SVG 路径作为图标
   </free-dialog>
 </template>
 ```
@@ -375,24 +422,34 @@ import myIcon from './assets/icon.png'
 
 组件内置 5 种智能动画，根据对话框位置自动选择：
 
+### 入场动画
+
 - **fadein-right**：从右侧滑入（当 right 值较小时）
 - **fadein-left**：从左侧滑入（当 left 值较小时）
 - **fadein-down**：从上方滑落（当 top 值较小时）
 - **fadein-up**：从下方升起（当 bottom 值较小时）
 - **fadein-center**：中心缩放淡入（默认）
 
-对应的出场动画会自动匹配：
+### 出场动画（自动匹配）
 
-- fadein-right → fadeout-left
-- fadein-left → fadeout-right
-- fadein-down → fadeout-up
-- fadein-up → fadeout-down
-- fadein-center → fadeout-center
+- **fadein-right** → fadeout-left
+- **fadein-left** → fadeout-right
+- **fadein-down** → fadeout-up
+- **fadein-up** → fadeout-down
+- **fadein-center** → fadeout-center
+
+### 自定义动画
 
 也可自定义动画 class：
 
 ```vue
 <free-dialog animation="my-custom-animation" />
+```
+
+### 禁用动画
+
+```vue
+<free-dialog :animation="false" />
 ```
 
 ---
@@ -404,7 +461,7 @@ import myIcon from './assets/icon.png'
 ```typescript
 // 在组件加载前设置
 import { defineComponent } from 'vue'
-import FreeDialog from './components/free-dialog.vue'
+import FreeDialog from 'vue-free-dialog'
 
 // 修改全局容器
 FreeDialog.globalConfig.warpper = '#custom-container'
@@ -417,14 +474,18 @@ FreeDialog.globalConfig.warpper = '#custom-container'
 1. **容器要求**：组件默认使用 `#app` 作为定位容器，确保该元素存在或使用 `warpper` prop 指定其他容器
 2. **位置优先级**：`position` prop 优先级高于单独的 `left/right/top/bottom`
 3. **单位支持**：支持数字（自动转 px）和字符串（如 `'50%'`, `'10rem'`）
-4. **折叠逻辑**：折叠状态下只显示缩略图图标，双击可展开，拖拽可移动
+4. **折叠逻辑**：
+   - 折叠状态下只显示缩略图图标
+   - v1.1.3 起默认单击展开（之前版本为双击）
+   - 可通过 thumbnail.trigger 配置为双击展开
+   - 拖拽图标可移动位置
 5. **缩放限制**：受 `minWidth/minHeight/maxWidth/maxHeight` 约束
 6. **自动调整**：窗口大小变化时自动调整对话框，防止超出边界
 7. **图标格式**：
-   - SVG 路径：只需 `<path>` 的 `d` 属性值，不需要完整的 `<svg>` 标签
+   - 推荐：直接导入 SVG/PNG 文件使用
    - 图片 URL：支持 http/https 链接或本地导入的图片
 8. **拖拽优化**：折叠图标已禁用浏览器原生拖拽，完全由自定义拖拽控制
-
+9. **自动置顶**：点击或拖拽对话框时会自动提升 z-index 到最上层
 ---
 
 ## 🔧 开发说明
@@ -434,7 +495,6 @@ FreeDialog.globalConfig.warpper = '#custom-container'
 - **Vue 3.x** - 渐进式 JavaScript 框架
 - **TypeScript** - JavaScript 的超集
 - **Vite** - 下一代前端构建工具
-- **SCSS** - CSS 预处理器
 - **零第三方依赖** - 仅依赖 Vue 3 核心库
 
 ### 本地开发
@@ -442,6 +502,9 @@ FreeDialog.globalConfig.warpper = '#custom-container'
 ```bash
 # 克隆项目
 git clone https://github.com/whanxueyu/vue-free-dialog.git
+
+# 进入项目目录
+cd vue-free-dialog
 
 # 安装依赖
 npm install
@@ -477,6 +540,13 @@ MIT License
 ---
 
 ## 📚 更新日志
+
+### v1.1.3（2026-03-16）
+ - ✨ 折叠图标触发方式优化：默认触发方式从双击改为单击，提升用户体验
+ - ✨ 新增 trigger 配置：支持通过 thumbnail.trigger 配置触发方式（'click' 或 'doubleClick'）
+ - 🐛 拖拽体验优化：完善折叠图标拖拽逻辑，准确区分点击和拖拽操作
+ - 🎨 图标格式增强：支持直接导入 SVG/PNG 文件作为图标
+ - 📝 文档更新：更新折叠图标触发方式的说明和示例
 
 ### v1.0.0
 - ✅ 完全移除 Element Plus 依赖，使用原生 SVG 图标

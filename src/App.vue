@@ -2,7 +2,6 @@
 import FreeDialog from "./components/free-dialog.vue";
 import { ref } from "vue";
 import vueIcon from "./assets/vue.svg";
-import CodePreview from "./components/code-preview.vue";
 const showDialog1 = ref(true);
 const showDialog2 = ref(false);
 const showDialog3 = ref(false);
@@ -28,7 +27,7 @@ const desc4 = ref(`
   :top="300" 
   :left="20" 
   @closed="handleFold" 
-  :thumbnail="{icon: vueIcon}"
+  :thumbnail="{icon: vueIcon, tigger:'click'}"
   `);
 const desc5 = ref(`
   title="带ICON弹窗" 
@@ -135,7 +134,7 @@ const handleFold = () => {
       底部自定义
     </div>
     <div class="tips">
-      可随意拖拽修改大小，有边缘计算，触底自动修改弹窗高度；折叠后的弹窗，双击图标可展开恢复；点击或拖拽弹窗会自动置顶；
+      可随意拖拽修改大小，有边缘计算，触底自动修改弹窗高度；折叠后的弹窗，点击图标可展开恢复；点击或拖拽弹窗会自动置顶；
     </div>
   </div>
   <FreeDialog
@@ -146,7 +145,7 @@ const handleFold = () => {
     :left="20"
     @closed="showDialog1 = false"
   >
-    <CodePreview v-model:code="desc1" language="html"></CodePreview>
+    <pre class="tool-code">{{ desc1 }}</pre>
   </FreeDialog>
   <FreeDialog
     :show="showDialog2"
@@ -156,7 +155,7 @@ const handleFold = () => {
     left="calc(50% - 200px)"
     @closed="showDialog2 = false"
   >
-    <CodePreview v-model:code="desc2" language="html"></CodePreview>
+    <pre class="tool-code">{{ desc2 }}</pre>
   </FreeDialog>
   <FreeDialog
     :show="showDialog3"
@@ -166,7 +165,7 @@ const handleFold = () => {
     :right="20"
     @closed="showDialog3 = false"
   >
-    <CodePreview v-model:code="desc3" language="html"></CodePreview>
+    <pre class="tool-code">{{ desc3 }}</pre>
   </FreeDialog>
   <FreeDialog
     :show="showDialog4"
@@ -176,10 +175,10 @@ const handleFold = () => {
     height="280"
     :left="20"
     @closed="handleFold"
-    :thumbnail="{ icon: vueIcon, left: 10 }"
+    :thumbnail="{ icon: vueIcon, left: 10, trigger: 'click' }"
     ref="dialogRef"
   >
-    <CodePreview v-model:code="desc4" language="html"></CodePreview>
+    <pre class="tool-code">{{ desc4 }}</pre>
   </FreeDialog>
   <FreeDialog
     :show="showDialog5"
@@ -191,7 +190,7 @@ const handleFold = () => {
     left="calc(50% - 200px)"
     @closed="showDialog5 = false"
   >
-    <CodePreview v-model:code="desc5" language="html"></CodePreview>
+    <pre class="tool-code">{{ desc5 }}</pre>
   </FreeDialog>
   <FreeDialog
     :show="showDialog6"
@@ -202,7 +201,7 @@ const handleFold = () => {
     @closed="showDialog6 = false"
     :draggable="false"
   >
-    <CodePreview v-model:code="desc6" language="html"></CodePreview>
+    <pre class="tool-code">{{ desc6 }}</pre>
   </FreeDialog>
   <FreeDialog
     :show="showDialog7"
@@ -233,7 +232,7 @@ const handleFold = () => {
         </svg>
       </div>
     </template>
-    <CodePreview v-model:code="desc7" language="html"></CodePreview>
+    <pre class="tool-code">{{ desc7 }}</pre>
   </FreeDialog>
   <FreeDialog
     :show="showDialog8"
@@ -250,62 +249,71 @@ const handleFold = () => {
         <button class="btn btn-plain" @click="showDialog8 = false">取消</button>
       </div>
     </template>
-    <CodePreview v-model:code="desc8" language="html"></CodePreview>
+    <pre class="tool-code">{{ desc8 }}</pre>
   </FreeDialog>
 </template>
 
-<style scoped lang="scss">
+<style scoped>
 .context {
   bottom: 0;
   position: absolute;
   margin: 20px;
-  .github-link {
-    display: inline-block;
-    padding: 6px 12px;
-    background-color: #a340ff;
-    border-radius: 6px;
-    margin-right: 10px;
-
-    a {
-      color: #ffffff;
-      text-decoration: none;
-      font-size: 14px;
-      font-weight: 500;
-      transition: all 0.2s ease;
-    }
-    &:hover {
-      background-color: #3445a3;
-    }
-  }
-  .tips {
-    margin-top: 10px;
-    background-color: #27447099;
-    padding: 6px 10px;
-  }
 }
+
+.context .github-link {
+  display: inline-block;
+  padding: 6px 12px;
+  background-color: #a340ff;
+  border-radius: 6px;
+  margin-right: 10px;
+}
+
+.context .github-link a {
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.context .github-link:hover {
+  background-color: #3445a3;
+}
+
+.context .tips {
+  margin-top: 10px;
+  background-color: #27447099;
+  padding: 6px 10px;
+}
+
 .slot-title {
   display: flex;
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  .text {
-    display: flex;
-    .text-title {
-      font-size: 14px;
-      font-weight: 500;
-      color: #08d0f3;
-    }
-    .text-sub {
-      font-size: 12px;
-      margin-left: 10px;
-      color: #ccc;
-    }
-  }
-  .operation-icon {
-    fill: #f8d033;
-    cursor: pointer;
-  }
 }
+
+.slot-title .text {
+  display: flex;
+}
+
+.slot-title .text .text-title {
+  font-size: 14px;
+  font-weight: 500;
+  color: #08d0f3;
+}
+
+.slot-title .text .text-sub {
+  font-size: 12px;
+  margin-left: 10px;
+  color: #ccc;
+}
+
+.slot-title .operation-icon {
+  fill: #f8d033;
+  cursor: pointer;
+}
+
 .btn {
   padding: 8px 16px;
   border: none;
@@ -316,20 +324,28 @@ const handleFold = () => {
   margin-right: 10px;
   background-color: #409eff;
   color: white;
+}
 
-  &.btn-plain {
-    background-color: transparent;
-    border: 1px solid #409eff;
-    color: #409eff;
-  }
+.btn.btn-plain {
+  background-color: transparent;
+  border: 1px solid #409eff;
+  color: #409eff;
+}
 
-  &.btn-small {
-    padding: 5px 10px;
-    font-size: 12px;
-  }
+.btn.btn-small {
+  padding: 5px 10px;
+  font-size: 12px;
+}
 
-  &:hover {
-    opacity: 0.8;
-  }
+.btn:hover {
+  opacity: 0.8;
+}
+
+.tool-code {
+  padding: 0;
+  margin: 0;
+  overflow: auto;
+  color: #dbedfd;
+  height: 100%;
 }
 </style>
