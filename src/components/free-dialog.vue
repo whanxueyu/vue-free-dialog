@@ -4,8 +4,9 @@
       class="free-dialog-thumb"
       v-show="isFold && show"
       ref="thumbnailRef"
-      @dblclick="toogleFold(false)"
-      @mousedown.stop="dragIconStart"
+      @dblclick="handleThumbnailClick('doubleClick')"
+      @click.prevent="handleThumbnailClick('click')"
+      @mousedown.prevent="dragIconStart"
     >
       <div class="icon">
         <img
@@ -109,6 +110,7 @@ type Thumbnail = {
   top?: number | string; // 定位 top 值
   bottom?: number | string; // 定位 bottom 值
   icon?: string; // 图标：可以是图片 URL 或 SVG 路径数据
+  trigger?: string; // 触发方式双击或点击 将默认双击改为单击 click
 }
 type FreeDialogProps = {
   warpper?: string; // 容器id 默认是app，将作为定位的参照元素，一般不需要修改
@@ -198,6 +200,7 @@ const mergeProps = computed(() => {
   newProps.thumbnail.top = newProps.thumbnail.top ?? newProps.top;
   newProps.thumbnail.bottom = newProps.thumbnail.bottom ?? newProps.bottom;
   newProps.thumbnail.icon = newProps.thumbnail.icon ?? newProps.icon;
+  newProps.thumbnail.trigger = newProps.thumbnail.trigger ?? "click";
   if (!isAllowValue(newProps.left) && !isAllowValue(newProps.right)) {
     // left right 都不存在时默认出现在左侧
     newProps.right = 10;
@@ -247,6 +250,16 @@ defineExpose({
   setSize,
   setPosition,
 });
+const handleThumbnailClick = (tigger:string) => {
+  // 如果拖拽过程中触发了移动，则不处理点击
+  if (isDragging.value) {
+    isDragging.value = false;
+    return;
+  }
+  if (mergeProps.value.thumbnail?.trigger === tigger) {
+      toogleFold(false);
+  }
+};
 function toogleFold(status: boolean) {
   isFold.value = status;
   nextTick(() => {
@@ -403,6 +416,7 @@ function toTheTop() {
   }
 }
 
+let isDragging = ref(false); // 标记是否正在拖拽
 function dragIconStart(event: any) {
   if (!warpperEle || !mergeProps.value.draggable) {
     return;
@@ -413,10 +427,15 @@ function dragIconStart(event: any) {
   const y = event.clientY;
   const bl = pb.offsetLeft;
   const bt = pb.offsetTop;
+  isDragging.value = false; // 重置拖拽标记
   bindMouseDrag(toPointerPosition);
   function toPointerPosition(e: any) {
     const distanceX = e.clientX - x;
     const distanceY = e.clientY - y;
+    // 只有当移动距离超过一定阈值时才认为是拖拽
+    if (Math.abs(distanceX) > 3 || Math.abs(distanceY) > 3) {
+      isDragging.value = true;
+    }
     const left = bl + distanceX;
     const top = bt + distanceY;
     setIconPosition("left", left);
@@ -751,7 +770,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style>
 :root {
   --free-dialog-bg-color: #254f67f0;
   --free-dialog-border-color: #1bdae7;
@@ -759,7 +778,7 @@ export default {
   --free-dialog-header-side-color: #306e85;
 }
 </style>
-<style lang="scss" scoped>
+<style scoped>
 .free-dialog-thumb {
   background-color: var(--free-dialog-bg-color);
   border: 1px solid var(--free-dialog-border-color);
@@ -773,14 +792,14 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
+}
 
-  .icon {
-    user-select: none;
-    -webkit-user-drag: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
+.free-dialog-thumb .icon {
+  user-select: none;
+  -webkit-user-drag: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .icon-img {
@@ -806,135 +825,136 @@ export default {
   border-radius: 4px;
   background-color: var(--free-dialog-bg-color);
   border: 1px solid var(--free-dialog-border-color);
-
-  .free-dialog__header {
-    height: 40px;
-    width: calc(100% - 20px);
-    line-height: 40px;
-    overflow: hidden;
-    padding: 0px 10px;
-    color: #ffffff;
-    position: absolute;
-    top: 0;
-    left: 0;
-    display: flex;
-    justify-content: space-between;
-    border-bottom: 1px solid var(--free-dialog-border-color);
-    user-select: none;
-    background-image: linear-gradient(
-      90deg,
-      transparent 0%,
-      var(--free-dialog-header-side-color) 20%,
-      var(--free-dialog-header-color) 50%,
-      var(--free-dialog-header-side-color) 80%,
-      transparent 100%
-    );
-
-    .icon {
-      margin-right: 5px;
-      float: left;
-      margin-top: 5px;
-      color: #ffffff;
-      display: flex;
-      align-items: center;
-    }
-
-    .title {
-      font-size: 16px;
-      color: #ffffff;
-    }
-
-    .close-btn {
-      float: right;
-      cursor: pointer;
-      margin-top: 10px;
-      fill: #ffffff;
-      color: #ffffff;
-    }
-  }
-
-  .close-btn__flot {
-    position: absolute;
-    right: 2px;
-    top: 2px;
-    cursor: pointer;
-    width: 18px;
-    fill: #ffffff;
-    color: #ffffff;
-  }
-
-  .free-dialog__content {
-    height: calc(100% - 10px);
-    overflow: auto;
-    margin: 10px 0;
-    border-radius: 4px;
-  }
-
-  .free-dialog__footer {
-    height: 44px;
-    width: 100%;
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    padding-left: 10px;
-  }
-
-  .free-dialog__handle {
-    box-sizing: border-box;
-    position: absolute;
-    z-index: 1;
-    width: 10px;
-    height: 10px;
-    opacity: 0;
-  }
-
-  .handle-t {
-    width: auto;
-    top: 0;
-    left: 10px;
-    right: 10px;
-    cursor: row-resize;
-  }
-
-  .handle-b {
-    width: auto;
-    bottom: 0;
-    left: 10px;
-    right: 10px;
-    cursor: row-resize;
-  }
-
-  .handle-l {
-    height: auto;
-    top: 10px;
-    left: 0;
-    bottom: 10px;
-    cursor: col-resize;
-  }
-
-  .handle-r {
-    height: auto;
-    top: 10px;
-    right: 0;
-    bottom: 10px;
-    cursor: col-resize;
-  }
-
-  .handle-rb {
-    bottom: 0;
-    right: 0;
-    cursor: nwse-resize;
-  }
-
-  .handle-lb {
-    bottom: 0;
-    left: 0;
-    cursor: nesw-resize;
-  }
 }
+
+.free-dialog .free-dialog__header {
+  height: 40px;
+  width: calc(100% - 20px);
+  line-height: 40px;
+  overflow: hidden;
+  padding: 0px 10px;
+  color: #ffffff;
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--free-dialog-border-color);
+  user-select: none;
+  background-image: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--free-dialog-header-side-color) 20%,
+    var(--free-dialog-header-color) 50%,
+    var(--free-dialog-header-side-color) 80%,
+    transparent 100%
+  );
+}
+
+.free-dialog .free-dialog__header .icon {
+  margin-right: 5px;
+  float: left;
+  margin-top: 5px;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+}
+
+.free-dialog .free-dialog__header .title {
+  font-size: 16px;
+  color: #ffffff;
+}
+
+.free-dialog .free-dialog__header .close-btn {
+  float: right;
+  cursor: pointer;
+  margin-top: 10px;
+  fill: #ffffff;
+  color: #ffffff;
+}
+
+.free-dialog .close-btn__flot {
+  position: absolute;
+  right: 2px;
+  top: 2px;
+  cursor: pointer;
+  width: 18px;
+  fill: #ffffff;
+  color: #ffffff;
+}
+
+.free-dialog .free-dialog__content {
+  height: calc(100% - 10px);
+  overflow: auto;
+  margin: 10px 0;
+  border-radius: 4px;
+}
+
+.free-dialog .free-dialog__footer {
+  height: 44px;
+  width: 100%;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding-left: 10px;
+}
+
+.free-dialog .free-dialog__handle {
+  box-sizing: border-box;
+  position: absolute;
+  z-index: 1;
+  width: 10px;
+  height: 10px;
+  opacity: 0;
+}
+
+.free-dialog .handle-t {
+  width: auto;
+  top: 0;
+  left: 10px;
+  right: 10px;
+  cursor: row-resize;
+}
+
+.free-dialog .handle-b {
+  width: auto;
+  bottom: 0;
+  left: 10px;
+  right: 10px;
+  cursor: row-resize;
+}
+
+.free-dialog .handle-l {
+  height: auto;
+  top: 10px;
+  left: 0;
+  bottom: 10px;
+  cursor: col-resize;
+}
+
+.free-dialog .handle-r {
+  height: auto;
+  top: 10px;
+  right: 0;
+  bottom: 10px;
+  cursor: col-resize;
+}
+
+.free-dialog .handle-rb {
+  bottom: 0;
+  right: 0;
+  cursor: nwse-resize;
+}
+
+.free-dialog .handle-lb {
+  bottom: 0;
+  left: 0;
+  cursor: nesw-resize;
+}
+
 
 /**下面是 5个 动画 */
 @keyframes fadeInRight {
